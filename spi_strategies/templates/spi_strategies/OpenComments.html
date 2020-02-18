@@ -1,0 +1,15 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Open Comments
+{% endblock %}
+
+{% block content %}
+<p>
+    If you would like to submit any final comments about this experiment, please record them below. You may leave this
+    section blank.
+    <br><br>{% formfield player.open_comments %}
+</p>
+    {% next_button %}
+{% endblock %}

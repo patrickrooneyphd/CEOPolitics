@@ -1,0 +1,30 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Final Payment
+{% endblock %}
+
+{% block content %}
+
+<p>
+    Thank you for participating in this experiment. The system has randomly chosen one period from each half for
+    payment.
+    <br><br>Please see your results below:
+    <br><br>First Half: Period {{ paying_round_a }} was chosen with payoff ${{ payoff_a }}
+    <br>Second Half: Period {{ paying_round_b }} was chosen with payoff ${{ payoff_b }}
+    <br>You also earned ${{ risk_payoff }} and ${{ amb_payoff }} from your choices in the questionnaire.
+    <br><br><b>Total Payoff: {{ payoff }}
+    <br>Total Donations to {{ cause }}: ${{ donation }}</b>
+    <br><br><br><br><br><br><b><u>IMPORTANT:</u>
+    <br><br>Please follow the completion URL below to complete the task:</b>
+    <br><a href="https://app.prolific.co/submissions/complete?cc=19B238AE">
+    https://app.prolific.co/submissions/complete?cc=19B238AE</a>
+    <br><br><br><br><br><br><br><br><br><br><br><br>Click the "Finish Session" button below to finish the session.
+    <br><br><button class="otree-btn-next btn btn-primary next-button otree-next-button">Finish Session</button>
+</p>
+
+{% endblock %}
+
+
+

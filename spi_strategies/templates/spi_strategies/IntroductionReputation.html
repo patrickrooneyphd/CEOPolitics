@@ -1,0 +1,30 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Company Reputation
+{% endblock %}
+
+{% block content %}
+
+<p>
+    As a final note, your decisions will have effects on the company's reputation. Given the company's lack of social
+    action in the past, donating 10% of earnings to {{ cause }} may anger some of your customers, resulting in lower
+    payoffs if you choose to switch back to taking no social action. <b>Specifically, when you play a strategy that
+    includes <u>not</u> donating, you will incur a penalty of ($1.00 x number of periods in which you donated). Original
+    (non-penalized) payoffs from strategies in which you donate will not be subject to this penalty, and
+    you cannot earn less than $0.00.</b>
+    <br><br>For example, suppose you choose to donate 10% to {{ cause }} in the first three periods as part of your
+    strategy. In the third period, suppose your strategy earns you $5.40 (and you generate $0.60 in donations).
+    For the fourth period, suppose you choose to play the previous CEO's strategy (and not take social action). Your
+    fourth period earnings will be $5.75 - $3.00, where $5.75 is the original
+    payoff that you would earn from the previous CEO's strategy minus a $1.00 penalty for each of the three previous
+    rounds in which you donated. If instead you had
+    chosen to play the same strategy in the fourth period as you did in the third period, you would receive the
+    original (non-penalized) payoff for that strategy, $5.40 and a $0.60 donation.
+    <br><br>Please click next to continue to the first period.
+    </br></br>
+        <button class="otree-btn-next btn btn-primary next-button otree-next-button">Next</button>
+</p>
+
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Period {{ subsession.round_number }} of {{ Constants.num_rounds }}
+{% endblock %}
+
+{% block content %}
+
+<p>
+    <br><br><h4>Notes on Previous Periods</h4>
+<table class="table">
+    <tr>
+        <th>Period</th>
+        <th>Type</th>
+        <th>Cotton Content (%)</th>
+        <th>Price ($)</th>
+        <th>Engagement with {{ cause }}</th>
+        <th>Board Response</th>
+        <th>Your Earnings ($)</th>
+    </tr>
+    {% for p in player_in_previous_rounds %}
+        <tr>
+            <td>{{ p.round_number }}</td>
+            <td>{{ p.type_n }}</td>
+            <td>{{ p.cotton_n }}</td>
+            <td>{{ p.price_n }}</td>
+            <td>{{ p.social_action_n }}</td>
+            <td>{{ p.board_block_n }}</td>
+            <td>{{ p.round_earnings_n }}</td>
+        </tr>
+    {% endfor %}
+</table>
+    <br><br><br><br>Please choose your strategies for this period.
+    <br><br>Type: {% formfield player.type_b %}
+    <br>Cotton Content (0% - 100%): {% formfield player.cotton_b %}
+    <br>Price ($9 - $109): {% formfield player.price_b %}
+    <br>Engagement with {{ cause }}: {% formfield player.social_action_b %}
+</p>
+
+    {% next_button %}
+
+{% endblock %}
+
+{% block styles %}
+
+<style>
+    table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+    }
+
+    td, th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
+
+    tr:nth-child(even) {
+        background-color: #dddddd;
+    }
+</style>
+{% endblock %}

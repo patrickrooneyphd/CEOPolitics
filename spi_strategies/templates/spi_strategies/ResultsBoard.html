@@ -1,0 +1,73 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Results
+{% endblock %}
+
+{% block content %}
+<p>
+    <b><font size="+2">The Board <u>{{ player.board_block }}</u> Your Proposed Strategy.</b>
+    <br>{{ player.board_penalty }} has been charged.</font>
+
+<br><br><h4>Your results this period:</h4>
+<table class="table">
+    <tr>
+        <th>Type</th>
+        <th>Cotton Content (%)</th>
+        <th>Price ($)</th>
+        <th>Engagement with {{ cause }}</th>
+        <th>Board Response</th>
+        <th>Your Earnings ($)</th>
+    </tr>
+    <tr>
+        <td>{{ player.type }}</td>
+        <td>{{ player.cotton }}</td>
+        <td>{{ player.price }}</td>
+        <td>{{ player.social_action }}</td>
+        <td>{{ player.board_block }}</td>
+        <td>{{ player.round_earnings_str }}</td>
+    </tr>
+</table>
+<br><br><b>You also generated ${{ player.round_donation_str }} in donations to {{ cause }}</b>.
+<br><br><br><br>If you would like to enter notes on this period's results, please do so in the table below. Any notes you
+take will appear before you make decisions in subsequent periods.
+<b>Results that you <u>do not</u> record below <u>will not</u> be displayed in subsequent periods.</b>
+<br><br><h4>Notes on this period's results:</h4>
+<table class="table">
+    <tr>
+        <th>Type</th>
+        <th>Cotton Content (%)</th>
+        <th>Price ($)</th>
+        <th>Engagement with {{ cause }}</th>
+        <th>Board Response</th>
+        <th>Your Earnings ($)</th>
+    </tr>
+    <tr>
+        <td>{% formfield player.type_n %}</td>
+        <td>{% formfield player.cotton_n %}</td>
+        <td>{% formfield player.price_n %}</td>
+        <td>{% formfield player.social_action_n %}</td>
+        <td>{% formfield player.board_block_n %}</td>
+        <td>{% formfield player.round_earnings_n %}</td>
+    </tr>
+</table>
+</p>
+    {% next_button %}
+{% endblock %}
+
+{% block styles %}
+
+    <style>
+    table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+    }
+
+    td, th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
+</style>
+{% endblock %}

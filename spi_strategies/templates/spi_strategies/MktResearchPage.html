@@ -1,0 +1,52 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Findings from Market Research Report
+{% endblock %}
+
+{% block content %}
+<p>
+
+    This report describes one production bundle (type, cotton content, price, social action) and associated
+    earnings. However, your researchers were uncertain about the specific value of one decision input. The decision
+    inputs that are certain are highlighted green, and the decision input that is uncertain is highlighted orange.
+    <br><br>This table will be displayed on each page of the second half for reference.
+
+    <h4>Below are the findings from your market research:</h4>
+<table class="table">
+    <tr>
+        <th>Type</th>
+        <th>Cotton Content</th>
+        <th>Price</th>
+        <th>Engagement with {{ cause }}</th>
+        <th>Prospective Earnings (inc. donations)</th>
+    </tr>
+    <tr>
+        <td bgcolor="#00FF000">Cardigan</td>
+        <td bgcolor="#FFBB3">40%</td>
+        <td bgcolor="#00FF000">$99</td>
+        <td bgcolor="#00FF000">Donate 10%</td>
+        <td bgcolor="#00FF000">$12.00</td>
+    </tr>
+</table>
+
+</p>
+    {% next_button %}
+{% endblock %}
+
+{% block styles %}
+
+    <style>
+    table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+    }
+
+    td, th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
+</style>
+{% endblock %}

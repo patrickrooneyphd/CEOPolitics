@@ -1,0 +1,35 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Questionnaire
+{% endblock %}
+
+{% block content %}
+<p>
+    Please answer a few questions. If you do not feel comfortable answering a question, you may leave it blank.
+    <br><br>Age:
+    <br><br>{% formfield player.age %}
+    <br>Gender:
+    <br><br>{% formfield player.gender %}
+    <br>Race:
+    <br><br>{% formfield player.race %}
+    <br>Have you volunteered within the past year?
+    <br><br>{% formfield player.volunteer %}
+    <br>Have you donated to a charitable cause within the past year?:
+    <br><br>{% formfield player.donated %}
+    <br>Which choice best describes your political orientation with respect to <b>social issues</b>?:
+    <br><br>{% formfield player.politics %}
+    <br>Do you believe it is appropriate for CEOs to take stances on controversial political issues in society?
+    <br><br>{% formfield player.stance_opinion %}
+    <br>Do you believe it is appropriate for firms to engage in costly corporate social responsibility (CSR) programs
+    that do not directly increase shareholder value (e.g., giving money to outside charities, community volunteering)?
+    <br><br>{% formfield player.csr_opinion %}
+    <br>Consider this scenario: you’re driving an autonomous car in manual mode — you’re inattentive and suddenly begin
+    hurtling towards five people at a farmer’s market at a deadly high speed. Your car senses this incoming collision
+    and has to decide how to react. If the only option is to jerk to the right and kill one person, instead of remaining
+    on its course and killing five, what should the car do?
+    <br><br>{% formfield player.trolley %}
+</p>
+    {% next_button %}
+{% endblock %}

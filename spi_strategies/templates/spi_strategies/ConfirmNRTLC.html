@@ -1,0 +1,22 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Confirm Payment Disbursements
+{% endblock %}
+
+{% block content %}
+
+<p>
+    Before beginning the experiment, you are required to confirm that you understand how your earnings will be paid.
+    Please type the following sentences into the boxes that follow to confirm. <b>You must type the sentences exactly as
+    they are presented (with period at the end) or else you will get an error.</b>
+    <br><br>Any donations I make in this experiment will go to The National Right to Life Committee.
+    <br>{% formfield player.confirm_cause_nrtlc %}
+    <br><br>My personal earnings in this experiment will be paid to me in real money.
+    <br>{% formfield player.confirm_money %}
+    </br></br>
+        <button class="otree-btn-next btn btn-primary next-button otree-next-button">Confirm Answers</button>
+</p>
+
+{% endblock %}

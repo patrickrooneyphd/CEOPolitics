@@ -1,0 +1,21 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Period {{ subsession.round_number }} of {{ Constants.num_rounds }}
+{% endblock %}
+
+{% block content %}
+
+<p>
+    Please choose your strategies for this period. Notes on previous periods' choices will be shown starting in period 2.
+    <br><br>Type: {% formfield player.type1 %}
+    <br>Cotton Content (0% - 100%): {% formfield player.cotton1 %}
+    <br>Price ($9 - $109): {% formfield player.price1 %}
+    <br>Engagement with {{ cause }}: {% formfield player.social_action1 %}
+</p>
+
+    {% next_button %}
+
+{% endblock %}
+

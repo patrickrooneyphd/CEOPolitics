@@ -1,0 +1,59 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Instructions
+{% endblock %}
+
+{% block content %}
+
+<p>
+    <br><br><b>You have been asked to participate in an economic experiment in which you may earn a significant amount
+    of money. Please read these instructions carefully, since you will only see this page once. </b>
+    <br><br>The experiment consists of a set of strategic decision-making tasks on your computer. Please complete this
+    experiment on a desktop or laptop, not a mobile device. Your identity and the decisions you make will remain
+    anonymous to the researchers and any other participants in this experiment.
+    <br><br>In this experiment, you will be assuming the role of CEO in a small sweater company. You are in charge of
+    making strategic decisions on a new line of sweater. There are four strategic decisions to make:
+    <br>
+    <ul>
+    <li>Type (cardigan, sweater vest, or turtleneck)</li>
+    <li>Cotton content in the sweater (0% - 100%)</li>
+    <li>Price of the sweater ($9 - $109)</li>
+    <li>Social engagement with a non-profit cause</li>
+    </ul>
+    As part of this last decision, you will make choices on how to strategically engage with <b>{{ cause }}</b>,
+    {{ cause_statement }}. Your engagement can take one of two forms: taking no social action or donating 10% of your
+    earnings in a period to {{ cause }}.
+    <br><br>The previous CEO of your company has left you a letter detailing the company's historic approach to
+    strategic decision-making. You will see this letter on the next page; please read it carefully since you will not be
+    able to return to this page.
+    <br><br>This experiment consists of 20 periods split into two halves (periods 1 - 10 in the first half, and periods
+    11 - 20 in the second half). In each period, you will make strategic decisions about sweater production and learn
+    the earnings associated with each decision set. Following these 20 periods, you will complete a short questionnaire
+    and will be informed of your earnings. One period from each half will be chosen at random at the end of
+    the experiment for payment, and the computer will average these two values for your final payment. The page will
+    also note any earnings you chose to donate to {{ cause }}.
+    <br><br><b>There is a good chance you will make more than 6.75 USD. Any amount you earn over 6.75 USD will
+    be paid to you as a bonus within 5 business days of completing the experiment</b>.
+    <br><br>All earnings and donations in this experiment are paid out in <u>real money</u>. You will receive your
+    earnings after participating in the experiment, and {{ cause }} will receive the accumulated donations from
+    participants once all experimental sessions are complete.
+    <br><br>This experiment should take around 45 minutes to complete. Before beginning, please carefully read the
+    following statement.
+    <br><br><br><b>NOTE: </b>This experiment requires the informed consent of participants. This survey is part of
+    an academic project conducted by researchers at the University of Toronto. Your identity will remain anonymous,
+    and any data gathered will not be identifiable. You may withdraw from this experiment at any time by exiting
+    your browser. If you choose to withdraw, your data will not be retained and will be immediately destroyed. If
+    you have any questions about this study, please contact the research supervisor, Nicola Lacetera, at
+    nicola.lacetera@utoronto.ca. If you have concerns about any harmful ethical implications of this research,
+    please reach out to ethics@utoronto.ca.
+    </br></br>
+
+    <b>If you agree to participate, indicate your consent by typing "I consent" (without quotes) into the box below.
+    </b> {% formfield player.consent %}
+    </br></br>
+    <button class="otree-btn-next btn btn-primary next-button otree-next-button">Next</button>
+</p>
+
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Board of Directors
+{% endblock %}
+
+{% block content %}
+
+<p>
+    As a final note, your decisions will be reviewed by the company's board of directors prior to implementation. Given
+    the company's lack of social action in the past, taking social action (donating 10% of earnings to {{ cause }})
+    will be subject to board approval. <b>The rate of board approval in any period is 50%</b>, and being
+    approved/rejected in one period has no impact on the chances of being approved or rejected in a future period.
+    <br><br>If the board approves your strategy, your strategy will be implemented. If the board rejects your strategy,
+    your company will implement the strategy from the previous CEO's letter with earnings $5.75. However, you will
+    also incur a $1.00 earnings penalty in order to make last-minute changes to production lines. Thus your earnings
+    in board rejection periods will be $4.75.
+    <br><br>Please click next to continue to the first period.
+    </br></br>
+        <button class="otree-btn-next btn btn-primary next-button otree-next-button">Next</button>
+</p>
+
+{% endblock %}
