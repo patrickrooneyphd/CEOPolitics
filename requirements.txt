@@ -1,4 +1,4 @@
-Django==1.11.2
+Django==1.11.28
 django-idmap==1.0.3
 django-vanilla-views==1.0.4
 docutils==0.14
