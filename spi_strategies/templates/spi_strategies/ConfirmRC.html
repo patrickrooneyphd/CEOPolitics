@@ -9,9 +9,10 @@
 
 <p>
     Before beginning the experiment, you are required to confirm that you understand how your earnings will be paid.
-    Please type the following sentences into the boxes that follow to confirm. <b>You must type the sentences exactly as
-    they are presented (with period at the end) or else you will get an error.</b>
-    <br><br>Any donations I make in this experiment will go to The American Red Cross.
+    Recall that the social cause in this experiment is <u>{{ cause }}, {{ cause_statement }}</u>.
+    <br><br>Please type the following sentences into the relevant boxes to advance. You will get an error if you
+    do not type them exactly as written.
+    <br><br>Any donations I make in this experiment will go to {{ cause }}.
     <br>{% formfield player.confirm_cause_rc %}
     <br><br>My personal earnings in this experiment will be paid to me in real money.
     <br>{% formfield player.confirm_money %}

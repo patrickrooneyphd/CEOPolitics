@@ -37,23 +37,33 @@ class Subsession(BaseSubsession):
             for p in self.get_players():
                 # condition = random.choice(['Board', 'Reputation', 'Control']) # Hidden for pilot testing.
                 condition = random.choice(['Board', 'Reputation'])
-                cause = random.choice(['Planned Parenthood', 'The National Right to Life Committee',
-                                      'The American Red Cross'])
+                # cause = random.choice(['Planned Parenthood', 'The National Right to Life Committee',
+                #                      'The American Red Cross'])
+                causes = ['The Human Rights Campaign', 'Focus on the Family', 'The American Red Cross']
+                cause = random.choice(causes)
                 if condition != 'Control':
-                    cause = 'Planned Parenthood'
+                    cause = causes[0]
                 else:
                     cause = cause
 
+                if cause == 'The Human Rights Campaign':
+                    cause_statement = "which is a large nonprofit organization in the United States \
+                                      advocating for same-sex marriage and transgender issues, among other things"
+                elif cause == "Focus on the Family":
+                    cause_statement = "which is a large nonprofit organization in the United States \
+                                      advocating against same-sex marriage and transgender issues, among \
+                                      other things"
+                else:
+                    cause_statement = "which is an American humanitarian organization that provides emergency \
+                                      assistance, disaster relief and preparedness programs, among other services"
+                '''
                 if cause == 'Planned Parenthood':
                     cause_statement = "which is the largest organization in the United States dedicated to women's \
                     reproductive health services. It is also the largest provider of abortions in the country"
                 elif cause == 'The National Right to Life Committee':
                     cause_statement = "which is the largest organization in the United States dedicated to lobbying for \
                     pro-life causes. It principally advocates against abortion, as well as euthanasia and assisted suicide"
-                else:
-                    cause_statement = "which is an American humanitarian organization that provides emergency assistance, \
-                    disaster relief and preparedness programs. It is part of the largest humanitarian network in the world"
-
+                '''
                 p.condition = condition
                 p.cause = cause
                 p.participant.vars['condition'] = condition
@@ -69,8 +79,6 @@ class Subsession(BaseSubsession):
             paying_round_a = random.randint(1, Constants.num_rounds/2)
             paying_round_b = random.randint(Constants.num_rounds/2 + 1,  Constants.num_rounds)
             for p in self.get_players():
-                #paying_round_a = random.randint(1, Constants.num_rounds/2)
-                #paying_round_b = random.randint(Constants.num_rounds/2 + 1,  Constants.num_rounds)
                 p.paying_round_a = paying_round_a
                 p.paying_round_b = paying_round_b
                 p.participant.vars['paying_round_a'] = paying_round_a
@@ -78,7 +86,6 @@ class Subsession(BaseSubsession):
                 p.donation_sum = 0.00
         else:
             pass
-
 
 
 class Group(BaseGroup):
@@ -97,7 +104,8 @@ class Player(BasePlayer):
     round_earnings_init = models.FloatField()
     condition = models.StringField()
     cause = models.StringField()
-    consent = models.StringField(label='', choices=['I consent'], widget=widgets.TextInput)
+    consent = models.StringField(label='', choices=['I consent', 'I consent '], widget=widgets.TextInput)
+    '''
     confirm_cause_pp = models.StringField(label='',
                                           choices=['Any donations I make in this experiment will '
                                                    'go to Planned Parenthood.'],
@@ -106,12 +114,32 @@ class Player(BasePlayer):
                                              choices=['Any donations I make in this experiment will go to The '
                                                       'National Right to Life Committee.'],
                                              widget=widgets.TextInput)
+    '''
+    confirm_cause_hrc = models.StringField(label='',
+                                           choices=['Any donations I make in this experiment '
+                                                    'will go to The Human Rights Campaign.',
+                                                    'Any donations I make in this experiment '
+                                                    'will go to The Human Rights Campaign'
+                                                    ],
+                                           widget=widgets.TextInput)
+    confirm_cause_fof = models.StringField(label='',
+                                           choices=['Any donations I make in this experiment \
+                                                        will go to Focus on the Family.',
+                                                    'Any donations I make in this experiment \
+                                                        will go to Focus on the Family'
+                                                    ],
+                                           widget=widgets.TextInput)
     confirm_cause_rc = models.StringField(label='',
                                           choices=['Any donations I make in this experiment '
-                                                   'will go to The American Red Cross.'],
+                                                   'will go to The American Red Cross.',
+                                                   'Any donations I make in this experiment '
+                                                   'will go to The American Red Cross'
+                                                   ],
                                           widget=widgets.TextInput)
     confirm_money = models.StringField(label='', choices=['My personal earnings in this experiment will be paid '
-                                                          'to me in real money.'],
+                                                          'to me in real money.',
+                                                          'My personal earnings in this experiment will be paid '
+                                                          'to me in real money'],
                                        widget=widgets.TextInput)
     donation = models.FloatField()
     donation_sum = models.FloatField()

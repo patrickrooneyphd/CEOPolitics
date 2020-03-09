@@ -60,12 +60,16 @@ class IntroductionReputation(Page):
     pass
 
 
+'''
 class ConfirmPP(Page):
     form_model = 'player'
     form_fields = ['confirm_cause_pp', 'confirm_money']
 
-    def is_displayed(self):
-        return self.round_number == 1 and self.participant.vars['cause'] == 'Planned Parenthood'
+    def vars_for_template(self):
+    return {
+        'cause': self.participant.vars['cause'],
+        'cause_statement': self.participant.vars['cause_statement']
+    }
     pass
 
 
@@ -75,6 +79,43 @@ class ConfirmNRTLC(Page):
 
     def is_displayed(self):
         return self.round_number == 1 and self.participant.vars['cause'] == 'The National Right to Life Committee'
+    
+    def vars_for_template(self):
+    return {
+        'cause': self.participant.vars['cause'],
+        'cause_statement': self.participant.vars['cause_statement']
+    }
+    pass
+'''
+
+
+class ConfirmHRC(Page):
+    form_model = 'player'
+    form_fields = ['confirm_cause_hrc', 'confirm_money']
+
+    def is_displayed(self):
+        return self.round_number == 1 and self.participant.vars['cause'] == 'The Human Rights Campaign'
+
+    def vars_for_template(self):
+        return {
+            'cause': self.participant.vars['cause'],
+            'cause_statement': self.participant.vars['cause_statement']
+        }
+    pass
+
+
+class ConfirmFOF(Page):
+    form_model = 'player'
+    form_fields = ['confirm_cause_fof', 'confirm_money']
+
+    def is_displayed(self):
+        return self.round_number == 1 and self.participant.vars['cause'] == 'Focus on the Family'
+
+    def vars_for_template(self):
+        return {
+            'cause': self.participant.vars['cause'],
+            'cause_statement': self.participant.vars['cause_statement']
+        }
     pass
 
 
@@ -84,6 +125,12 @@ class ConfirmRC(Page):
 
     def is_displayed(self):
         return self.round_number == 1 and self.participant.vars['cause'] == 'The American Red Cross'
+
+    def vars_for_template(self):
+        return {
+            'cause': self.participant.vars['cause'],
+            'cause_statement': self.participant.vars['cause_statement']
+        }
     pass
 
 
@@ -380,8 +427,10 @@ page_sequence = [
     ManagerAdvice,
     IntroductionBoard,
     IntroductionReputation,
-    ConfirmPP,
-    ConfirmNRTLC,
+    # ConfirmPP,
+    # ConfirmNRTLC,
+    ConfirmHRC,
+    ConfirmFOF,
     ConfirmRC,
     MktResearchInstructions,
     MktResearchPage,
