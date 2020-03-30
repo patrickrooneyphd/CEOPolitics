@@ -27,6 +27,7 @@ class Constants(BaseConstants):
     reputation_penalty = 1.00
     min_value = 1.00
     board_deny_threshold = 50
+    likert = ['Strongly Disagree', 'Disagree', 'Slightly Disagree', 'Slightly Agree', 'Agree', 'Strongly Agree']
 
 
 class Subsession(BaseSubsession):
@@ -35,35 +36,28 @@ class Subsession(BaseSubsession):
         # == Randomize Conditions == #
         if self.round_number == 1:
             for p in self.get_players():
-                # condition = random.choice(['Board', 'Reputation', 'Control']) # Hidden for pilot testing.
-                condition = random.choice(['Board', 'Reputation'])
-                # cause = random.choice(['Planned Parenthood', 'The National Right to Life Committee',
-                #                      'The American Red Cross'])
-                causes = ['The Human Rights Campaign', 'Focus on the Family', 'The American Red Cross']
+                condition = random.choice(['Board', 'Reputation', 'Control'])
+                survey_rand = random.randint(1, 3)
+                p.survey_key = survey_rand
+                # condition = random.choice(['Board', 'Reputation']) # Hidden for pilot testing.
+                causes = ['Planned Parenthood', 'The National Right to Life Committee',
+                                        'The American Red Cross']
                 cause = random.choice(causes)
                 if condition != 'Control':
                     cause = causes[0]
                 else:
                     cause = cause
 
-                if cause == 'The Human Rights Campaign':
-                    cause_statement = "which is a large nonprofit organization in the United States \
-                                      advocating for same-sex marriage and transgender issues, among other things"
-                elif cause == "Focus on the Family":
-                    cause_statement = "which is a large nonprofit organization in the United States \
-                                      advocating against same-sex marriage and transgender issues, among \
-                                      other things"
-                else:
-                    cause_statement = "which is an American humanitarian organization that provides emergency \
-                                      assistance, disaster relief and preparedness programs, among other services"
-                '''
                 if cause == 'Planned Parenthood':
                     cause_statement = "which is the largest organization in the United States dedicated to women's \
                     reproductive health services. It is also the largest provider of abortions in the country"
                 elif cause == 'The National Right to Life Committee':
                     cause_statement = "which is the largest organization in the United States dedicated to lobbying for \
                     pro-life causes. It principally advocates against abortion, as well as euthanasia and assisted suicide"
-                '''
+                else:
+                    cause_statement = "which is an American humanitarian organization that provides emergency \
+                                      assistance, disaster relief and preparedness programs, among other services"
+
                 p.condition = condition
                 p.cause = cause
                 p.participant.vars['condition'] = condition
@@ -94,41 +88,52 @@ class Group(BaseGroup):
 
 class Player(BasePlayer):
 
-    ## == OBJECTS == ##
+    # == OBJECTS == #
     # == Base Objects == #
     prolific_id = models.StringField()
     start_time = models.FloatField()
     end_time = models.FloatField()
     round_earnings = models.FloatField()
     round_earnings_str = models.StringField()
-    round_earnings_init = models.FloatField()
+    # round_earnings_init = models.FloatField()
     condition = models.StringField()
+    survey_key = models.IntegerField()
+
+    # A few of the questions below are from Burbano (2020, ManSci), Table 1 #
+    def make_survey_fields(label):
+        return models.StringField(
+            label=label,
+            choices=Constants.likert,
+            widget=widgets.RadioSelect
+        )
+
+    eligible_survey_1 = make_survey_fields('Family planning organizations should not provide abortion services.')
+    eligible_survey_2 = make_survey_fields("I generally consider myself Pro-Life on abortion issues.")
+    eligible_survey_3 = make_survey_fields('The media is a trustworthy source of news and current events.')
+    eligible_survey_4 = make_survey_fields('I think police officers should be required to wear body cameras.')
+    eligible_survey_5 = make_survey_fields('The United States should use drone strikes overseas to diminish terrorism.')
+    eligible_survey_6 = make_survey_fields('Transgender individuals should be allowed to serve in the U.S. military.')
+    eligible_survey_7 = make_survey_fields('I believe the ability to own a gun is a basic aspect of American freedom.')
+    eligible_survey_8 = make_survey_fields('I think the U.S. government should institute stricter gun control rules.')
+    eligible_survey_9 = make_survey_fields("The mainstream media can't be counted on to report the truth.")
+    eligible_survey_10 = make_survey_fields('The U.S. should withdraw from all military activity in the Middle East.')
+    eligible = models.IntegerField()
     cause = models.StringField()
     consent = models.StringField(label='', choices=['I consent', 'I consent '], widget=widgets.TextInput)
-    '''
     confirm_cause_pp = models.StringField(label='',
                                           choices=['Any donations I make in this experiment will '
-                                                   'go to Planned Parenthood.'],
+                                                   'go to Planned Parenthood.',
+                                                   'Any donations I make in this experiment will '
+                                                   'go to Planned Parenthood'
+                                                   ],
                                           widget=widgets.TextInput)
     confirm_cause_nrtlc = models.StringField(label='',
                                              choices=['Any donations I make in this experiment will go to The '
-                                                      'National Right to Life Committee.'],
+                                                      'National Right to Life Committee.',
+                                                      'Any donations I make in this experiment will go to The '
+                                                      'National Right to Life Committee'
+                                                      ],
                                              widget=widgets.TextInput)
-    '''
-    confirm_cause_hrc = models.StringField(label='',
-                                           choices=['Any donations I make in this experiment '
-                                                    'will go to The Human Rights Campaign.',
-                                                    'Any donations I make in this experiment '
-                                                    'will go to The Human Rights Campaign'
-                                                    ],
-                                           widget=widgets.TextInput)
-    confirm_cause_fof = models.StringField(label='',
-                                           choices=['Any donations I make in this experiment \
-                                                        will go to Focus on the Family.',
-                                                    'Any donations I make in this experiment \
-                                                        will go to Focus on the Family'
-                                                    ],
-                                           widget=widgets.TextInput)
     confirm_cause_rc = models.StringField(label='',
                                           choices=['Any donations I make in this experiment '
                                                    'will go to The American Red Cross.',
@@ -241,6 +246,7 @@ class Player(BasePlayer):
     )
     board_block = models.StringField()
     board_penalty = models.StringField()
+    pre_decision_earnings = models.FloatField()
 
     # == Attention and Manipulation Check Objects == #
 
@@ -302,78 +308,27 @@ class Player(BasePlayer):
         choices=['Do Nothing; Kill Five People', 'Jerk to the Right; Kill One Person'],
         blank=True
     )
-    risk1 = models.StringField(
-        label='',
-        widget=widgets.RadioSelect,
-        choices=['$7 for certain', '$10 with probability 50%, $2 with probability 50%'],
-        blank=True
-    )
-    risk2 = models.StringField(
-        label='',
-        widget=widgets.RadioSelect,
-        choices=['$6 for certain', '$10 with probability 50%, $2 with probability 50%'],
-        blank=True
-    )
-    risk3 = models.StringField(
-        label='',
-        widget=widgets.RadioSelect,
-        choices=['$5 for certain', '$10 with probability 50%, $2 with probability 50%'],
-        blank=True
-    )
-    risk4 = models.StringField(
-        label='',
-        widget=widgets.RadioSelect,
-        choices=['$4 for certain', '$10 with probability 50%, $2 with probability 50%'],
-        blank=True
-    )
-    risk5 = models.StringField(
-        label='',
-        widget=widgets.RadioSelect,
-        choices=['$3 for certain', '$10 with probability 50%, $2 with probability 50%'],
-        blank=True
-    )
-    amb1 = models.StringField(
-        label='',
-        widget=widgets.RadioSelect,
-        choices=['Bag 1 (containing 16 red balls and 4 black balls)', 'Bag 2 (containing 20 balls)'],
-        blank=True
-    )
-    amb2 = models.StringField(
-        label='',
-        widget=widgets.RadioSelect,
-        choices=['Bag 1 (containing 14 red balls and 6 black balls)', 'Bag 2 (containing 20 balls)'],
-        blank=True
-    )
-    amb3 = models.StringField(
-        label='',
-        widget=widgets.RadioSelect,
-        choices=['Bag 1 (containing 12 red balls and 8 black balls)', 'Bag 2 (containing 20 balls)'],
-        blank=True
-    )
-    amb4 = models.StringField(
-        label='',
-        widget=widgets.RadioSelect,
-        choices=['Bag 1 (containing 10 red balls and 10 black balls)', 'Bag 2 (containing 20 balls)'],
-        blank=True
-    )
-    amb5 = models.StringField(
-        label='',
-        widget=widgets.RadioSelect,
-        choices=['Bag 1 (containing 8 red balls and 12 black balls)', 'Bag 2 (containing 20 balls)'],
-        blank=True
-    )
-    amb6 = models.StringField(
-        label='',
-        widget=widgets.RadioSelect,
-        choices=['Bag 1 (containing 6 red balls and 14 black balls)', 'Bag 2 (containing 20 balls)'],
-        blank=True
-    )
-    amb7 = models.StringField(
-        label='',
-        widget=widgets.RadioSelect,
-        choices=['Bag 1 (containing 4 red balls and 16 black balls)', 'Bag 2 (containing 20 balls)'],
-        blank=True
-    )
+
+    def make_risk_amb_fields(choices):
+        return models.StringField(
+            label='',
+            widget=widgets.RadioSelect,
+            choices=choices,
+            blank=True,
+        )
+
+    risk1 = make_risk_amb_fields(['$7 for certain', '$10 with probability 50%, $2 with probability 50%'])
+    risk2 = make_risk_amb_fields(['$6 for certain', '$10 with probability 50%, $2 with probability 50%'])
+    risk3 = make_risk_amb_fields(['$5 for certain', '$10 with probability 50%, $2 with probability 50%'])
+    risk4 = make_risk_amb_fields(['$4 for certain', '$10 with probability 50%, $2 with probability 50%'])
+    risk5 = make_risk_amb_fields(['$3 for certain', '$10 with probability 50%, $2 with probability 50%'])
+    amb1 = make_risk_amb_fields(['Bag 1 (containing 16 red balls and 4 black balls)', 'Bag 2 (containing 20 balls)'])
+    amb2 = make_risk_amb_fields(['Bag 1 (containing 14 red balls and 6 black balls)', 'Bag 2 (containing 20 balls)'])
+    amb3 = make_risk_amb_fields(['Bag 1 (containing 12 red balls and 8 black balls)', 'Bag 2 (containing 20 balls)'])
+    amb4 = make_risk_amb_fields(['Bag 1 (containing 10 red balls and 10 black balls)', 'Bag 2 (containing 20 balls)'])
+    amb5 = make_risk_amb_fields(['Bag 1 (containing 8 red balls and 12 black balls)', 'Bag 2 (containing 20 balls)'])
+    amb6 = make_risk_amb_fields(['Bag 1 (containing 6 red balls and 14 black balls)', 'Bag 2 (containing 20 balls)'])
+    amb7 = make_risk_amb_fields(['Bag 1 (containing 4 red balls and 16 black balls)', 'Bag 2 (containing 20 balls)'])
     risk_payoff = models.FloatField()
     risk_payoff_str = models.StringField()
     amb_payoff = models.FloatField()
@@ -385,7 +340,20 @@ class Player(BasePlayer):
     )
 
     # == FUNCTIONS == #
+    # == Are participants eligible? == #
+
+    def set_eligibility(self):
+        agree_list = ['Strongly Agree', 'Agree', 'Slightly Agree']
+        agree_one = (self.eligible_survey_1 in agree_list)
+        agree_two = (self.eligible_survey_2 in agree_list)
+        if agree_one or agree_two is True:
+            self.eligible = 1
+        else:
+            self.eligible = 0
+        self.participant.vars['eligible'] = self.eligible
+
     # == Assign first period choices to choice variables == #
+
     def first_period_to_vars(self):
         self.type = self.type1
         self.cotton = self.cotton1
@@ -398,19 +366,19 @@ class Player(BasePlayer):
         self.price_b = self.price1
         self.social_action_b = self.social_action1
 
-    # == Set random numbers for functions that follow== #
-    def set_rand_num(self):
+    # == Set random numbers for board blocking functions, map board condition choices to round earning choices== #
+    def initialize_board_calcs(self):
         self.rand_num = random.randint(0, 100)
+        self.type = self.type_b
+        self.cotton = self.cotton_b
+        self.price = self.price_b
+        self.social_action = self.social_action_b
 
-    # == Adjust payoff for board condition == #
-    def board_interference(self):
+    # == After gathering pre_decision_earnings, assign new choices if board blocks. == #
+    def board_decision(self):
         if self.social_action_b == 'No Action' or self.rand_num > Constants.board_deny_threshold:
             self.board_block = "Did Not Block"
             self.board_penalty = "No penalty"
-            self.type = self.type_b
-            self.cotton = self.cotton_b
-            self.price = self.price_b
-            self.social_action = self.social_action_b
         else:
             self.board_block = "Blocked"
             self.board_penalty = "A $1.00 penalty"
@@ -462,9 +430,13 @@ class Player(BasePlayer):
                           abs(Constants.opt_values[1, 2] - self.price) / 10.0 * Constants.penalty[2, 2],
                                             Constants.min_value), 2)
 
-        self.round_earnings_init = round(self.round_earnings, 2)
+        # self.round_earnings_init = round(self.round_earnings, 2)
 
-    # == Adjust payoff for board interference and reputation == #
+    # == Set pre-decision earnings == #
+    def set_pre_decision_earnings(self):
+        self.pre_decision_earnings = self.round_earnings - (self.round_earnings * Constants.donation_pct)
+
+    # == Adjust payoff for board decision and reputation == #
     def board_adjust(self):
         if self.board_block == 'Blocked':
             self.round_earnings = Constants.orig_value - Constants.min_value

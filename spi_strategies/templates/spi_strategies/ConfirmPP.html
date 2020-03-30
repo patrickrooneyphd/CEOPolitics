@@ -8,6 +8,7 @@
 {% block content %}
 
 <p>
+    <body oncopy="return false" oncut="return false" onpaste="return false">
     Before beginning the experiment, you are required to confirm that you understand how your earnings will be paid.
     Recall that the social cause in this experiment is <u>{{ cause }}, {{ cause_statement }}</u>.
     <br><br>Please type the following sentences into the relevant boxes to advance. You will get an error if you
@@ -16,8 +17,24 @@
     <br>{% formfield player.confirm_cause_pp %}
     <br><br>My personal earnings in this experiment will be paid to me in real money.
     <br>{% formfield player.confirm_money %}
+    </body>
     </br></br>
         <button class="otree-btn-next btn btn-primary next-button otree-next-button">Confirm Answers</button>
 </p>
 
+{% endblock %}
+
+{% block scripts %}
+<css>
+    preventcopy class
+
+    .preventcopy {
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+}
+</css>
 {% endblock %}

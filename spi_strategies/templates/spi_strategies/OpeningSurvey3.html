@@ -1,0 +1,26 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Survey Eligibility
+{% endblock %}
+
+{% block content %}
+
+<p>Please answer a few questions to confirm your eligibility to complete this survey.
+    <br><br>{% formfield player.eligible_survey_3 %}
+    <br><br>{% formfield player.eligible_survey_4 %}
+    <br><br>{% formfield player.eligible_survey_1 %}
+    <br><br>{% formfield player.eligible_survey_9 %}
+    <br><br>{% formfield player.eligible_survey_8 %}
+    <br><br>{% formfield player.eligible_survey_2 %}
+    <br><br>{% formfield player.eligible_survey_10 %}
+    <br><br>{% formfield player.eligible_survey_6 %}
+    <br><br>{% formfield player.eligible_survey_7 %}
+    <br><br>{% formfield player.eligible_survey_5 %}
+
+    </br></br>
+    <button class="otree-btn-next btn btn-primary next-button otree-next-button">Next</button>
+</p>
+
+{% endblock %}

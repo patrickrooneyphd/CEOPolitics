@@ -1,0 +1,33 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Consent
+{% endblock %}
+
+{% block content %}
+
+<p>
+    <br><br><b>You have been asked to participate in an economic experiment in which you may earn a significant amount
+    of money. Please read these instructions carefully, since you will only see this page once. </b>
+    <br><br>The experiment consists of a set of strategic decision-making tasks on your computer. Please complete this
+    experiment on a desktop or laptop, not a mobile device. Your identity and the decisions you make will remain
+    anonymous to the researchers and any other participants in this experiment.
+    <br><br>This experiment should take around 35 minutes to complete. Before beginning, please carefully read the
+    following statement.
+    <br><br></b>This experiment requires the informed consent of participants. This survey is part of
+    an academic project conducted by researchers at the University of Toronto. Your identity will remain anonymous,
+    and any data gathered will not be identifiable. You may withdraw from this experiment at any time by exiting
+    your browser. If you choose to withdraw, your data will not be retained and will be immediately destroyed. If
+    you have any questions about this study, please contact the research supervisor, Nicola Lacetera, at
+    nicola.lacetera@utoronto.ca. If you have concerns about any harmful ethical implications of this research,
+    please reach out to ethics@utoronto.ca.
+    </br></br>
+
+    <b>If you agree to participate, indicate your consent by typing "I consent" (without quotes) into the box below.
+    </b> {% formfield player.consent %}
+    </br></br>
+    <button class="otree-btn-next btn btn-primary next-button otree-next-button">Next</button>
+</p>
+
+{% endblock %}
