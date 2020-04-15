@@ -18,14 +18,17 @@ Antecedents to CEOs' Strategic Political Stances
 class Constants(BaseConstants):
     name_in_url = 'spi_strategies'
     players_per_group = None
-    num_rounds = 20
-    max_pi = np.array([7.0, 10.0, 18.0])
-    opt_values = np.array([[90, 60, 10], [9, 49, 99]])
-    penalty = np.array([[0.25, 5, 6], [0.25, 2, 3], [0.25, 2, 3]])
+    num_rounds = 10
+    max_pi = np.array([3.5, 5.0, 9.0])
+    opt_values = np.array([[90, 60, 10],
+                           [9, 49, 99]])
+    penalty = np.array([[0.10, 2.50, 3.00],
+                        [0.10, 1.00, 1.50],
+                        [0.10, 1.00, 1.50]])
     donation_pct = 0.10
-    orig_value = 5.75
-    reputation_penalty = 1.00
-    min_value = 1.00
+    orig_value = 3.00
+    reputation_penalty = 0.25
+    min_value = 0.50
     board_deny_threshold = 50
     likert = ['Strongly Disagree', 'Disagree', 'Slightly Disagree', 'Slightly Agree', 'Agree', 'Strongly Agree']
 
@@ -37,23 +40,28 @@ class Subsession(BaseSubsession):
         if self.round_number == 1:
             for p in self.get_players():
                 condition = random.choice(['Board', 'Reputation', 'Control'])
-                survey_rand = random.randint(1, 3)
-                p.survey_key = survey_rand
+                # survey_rand = random.randint(1, 3) # Hidden for pilot testing.
+                # p.survey_key = survey_rand # Hidden for pilot testing.
                 # condition = random.choice(['Board', 'Reputation']) # Hidden for pilot testing.
-                causes = ['Planned Parenthood', 'The National Right to Life Committee',
-                                        'The American Red Cross']
+                causes = ['the National Rifle Association (NRA)', 'Everytown for Gun Safety', 'The American Red Cross']
                 cause = random.choice(causes)
                 if condition != 'Control':
                     cause = causes[0]
                 else:
                     cause = cause
-
-                if cause == 'Planned Parenthood':
-                    cause_statement = "which is the largest organization in the United States dedicated to women's \
-                    reproductive health services. It is also the largest provider of abortions in the country"
-                elif cause == 'The National Right to Life Committee':
-                    cause_statement = "which is the largest organization in the United States dedicated to lobbying for \
-                    pro-life causes. It principally advocates against abortion, as well as euthanasia and assisted suicide"
+                if cause == "the National Rifle Association (NRA)":
+                    cause_statement = "which is a prominent organization in the United States dedicated to protecting " \
+                                      "gun rights and providing gun education services"
+                elif cause == "Everytown for Gun Safety":
+                    cause_statement = "which is a prominent organization in the United States dedicated to advocating " \
+                                      "for gun control and against gun violence"
+                # if cause == 'Planned Parenthood':
+                #     cause_statement = "which is the largest organization in the United States dedicated to women's \
+                #     reproductive health services. It is also the largest provider of abortions in the country"
+                # elif cause == 'The National Right to Life Committee':
+                #     cause_statement = "which is the largest organization in the United States dedicated to lobbying
+                #     for pro-life causes. It principally advocates against abortion, as well as euthanasia and
+                #     assisted suicide"
                 else:
                     cause_statement = "which is an American humanitarian organization that provides emergency \
                                       assistance, disaster relief and preparedness programs, among other services"
@@ -100,6 +108,7 @@ class Player(BasePlayer):
     survey_key = models.IntegerField()
 
     # A few of the questions below are from Burbano (2020, ManSci), Table 1 #
+    '''
     def make_survey_fields(label):
         return models.StringField(
             label=label,
@@ -118,20 +127,25 @@ class Player(BasePlayer):
     eligible_survey_9 = make_survey_fields("The mainstream media can't be counted on to report the truth.")
     eligible_survey_10 = make_survey_fields('The U.S. should withdraw from all military activity in the Middle East.')
     eligible = models.IntegerField()
+    '''
     cause = models.StringField()
     consent = models.StringField(label='', choices=['I consent', 'I consent '], widget=widgets.TextInput)
-    confirm_cause_pp = models.StringField(label='',
+    confirm_cause_nra = models.StringField(label='',
                                           choices=['Any donations I make in this experiment will '
-                                                   'go to Planned Parenthood.',
+                                                   'go to the National Rifle Association (NRA).',
                                                    'Any donations I make in this experiment will '
-                                                   'go to Planned Parenthood'
+                                                   'go to the National Rifle Association (NRA)',
+                                                   'Any donations I make in this experiment will '
+                                                   'go to the National Rifle Association.',
+                                                   'Any donations I make in this experiment will '
+                                                   'go to the National Rifle Association',
                                                    ],
                                           widget=widgets.TextInput)
-    confirm_cause_nrtlc = models.StringField(label='',
-                                             choices=['Any donations I make in this experiment will go to The '
-                                                      'National Right to Life Committee.',
-                                                      'Any donations I make in this experiment will go to The '
-                                                      'National Right to Life Committee'
+    confirm_cause_etfgs = models.StringField(label='',
+                                             choices=['Any donations I make in this experiment will go to '
+                                                      'Everytown for Gun Safety.',
+                                                      'Any donations I make in this experiment will go to '
+                                                      'Everytown for Gun Safety'
                                                       ],
                                              widget=widgets.TextInput)
     confirm_cause_rc = models.StringField(label='',
@@ -499,7 +513,7 @@ class Player(BasePlayer):
 
     def extra_payments(self):
         risk = random.choice([self.risk1, self.risk2, self.risk3, self.risk4, self.risk5])
-        risk_dict = {self.risk1: 0.70, self.risk2: 0.60, self.risk3: 0.50, self.risk4: 0.40, self.risk5: 0.30}
+        risk_dict = {self.risk1: 0.35, self.risk2: 0.30, self.risk3: 0.25, self.risk4: 0.20, self.risk5: 0.15}
         amb = random.choice([self.amb1, self.amb2, self.amb3, self.amb4, self.amb5, self.amb6, self.amb7])
         amb_dict = {self.amb1: 80, self.amb2: 70, self.amb3: 60, self.amb4: 50, self.amb5: 40,
                     self.amb6: 30, self.amb7: 20}
@@ -509,11 +523,11 @@ class Player(BasePlayer):
         #== Risk Aversion Payoffs ==#
         if risk == '$10 with probability 50%, $2 with probability 50%':
             if rand1 > 50:
-                self.payoff = self.payoff + 1.00
-                self.risk_payoff = 1.00
+                self.payoff = self.payoff + 0.50
+                self.risk_payoff = 0.50
             else:
-                self.risk_payoff = 0.20
-                self.payoff = self.payoff + 0.20
+                self.risk_payoff = 0.10
+                self.payoff = self.payoff + 0.10
         else:
             self.risk_payoff = risk_dict[risk]
             self.payoff = self.payoff + self.risk_payoff
@@ -521,19 +535,19 @@ class Player(BasePlayer):
         # == Ambiguity Aversion Payoffs ==#
         if amb == 'Bag 2 (containing 20 balls)':
             if rand1 > rand2:
-                self.payoff = self.payoff + 1.00
-                self.amb_payoff = 1.00
+                self.payoff = self.payoff + 0.50
+                self.amb_payoff = 0.50
             else:
-                self.payoff = self.payoff + 0.20
-                self.amb_payoff = 0.20
+                self.payoff = self.payoff + 0.10
+                self.amb_payoff = 0.10
         else:
             amb_val = amb_dict[amb]
             if amb_val > rand2:
-                self.payoff = self.payoff + 1.00
-                self.amb_payoff = 1.00
+                self.payoff = self.payoff + 0.50
+                self.amb_payoff = 0.50
             else:
-                self.payoff = self.payoff + 0.20
-                self.amb_payoff = 0.20
+                self.payoff = self.payoff + 0.10
+                self.amb_payoff = 0.10
 
         self.risk_payoff_str = '{:,.2f}'.format(self.risk_payoff)
         self.participant.vars['risk_payoff'] = self.risk_payoff_str
