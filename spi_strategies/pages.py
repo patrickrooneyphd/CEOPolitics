@@ -22,6 +22,7 @@ class Consent(Page):
         return self.round_number == 1
 
 
+# REMOVED PRE-SCREENING SURVEY
 '''
 class OpeningSurvey1(Page):
     form_model = 'player'
@@ -380,9 +381,9 @@ class AttentionCheck(Page):
     pass
 
 
-class ManipulationChecks(Page):
+class FreeResponse(Page):
     form_model = 'player'
-    form_fields = ['manip_1', 'manip_2', 'manip_3', 'manip_4']
+    form_fields = ['free_response_1', 'free_response_2', 'free_response_3', 'free_response_4']
 
     def is_displayed(self):
         return self.round_number == Constants.num_rounds and self.participant.vars['condition'] == 'Control' \
@@ -395,9 +396,10 @@ class ManipulationChecks(Page):
     pass
 
 
-class ManipulationChecksBoard(Page):
+class FreeResponseBoard(Page):
     form_model = 'player'
-    form_fields = ['manip_1', 'manip_2', 'manip_3', 'manip_4', 'manip_b1', 'manip_b2']
+    form_fields = ['free_response_1', 'free_response_2', 'free_response_3', 'free_response_4',
+                   'free_response_b1', 'free_response_b2']
 
     def is_displayed(self):
         return self.round_number == Constants.num_rounds and self.participant.vars['condition'] == 'Board' \
@@ -410,9 +412,10 @@ class ManipulationChecksBoard(Page):
     pass
 
 
-class ManipulationChecksReputation(Page):
+class FreeResponseReputation(Page):
     form_model = 'player'
-    form_fields = ['manip_1', 'manip_2', 'manip_3', 'manip_4', 'manip_r1', 'manip_r2']
+    form_fields = ['free_response_1', 'free_response_2', 'free_response_3', 'free_response_4',
+                   'free_response_r1', 'free_response_r2']
 
     def is_displayed(self):
         return self.round_number == Constants.num_rounds and self.participant.vars['condition'] == 'Reputation' \
@@ -429,6 +432,15 @@ class Questionnaire(Page):
     form_model = 'player'
     form_fields = ['age', 'gender', 'race', 'volunteer', 'donated', 'politics', 'stance_opinion', 'csr_opinion',
                    'trolley']
+
+    def is_displayed(self):
+        return self.round_number == Constants.num_rounds  # and self.participant.vars['eligible'] == 1
+    pass
+
+
+class FairMktIdeology(Page):
+    form_model = 'player'
+    form_fields = ['fair1', 'fair2', 'fair3_r', 'fair4_r', 'fair5', 'fair6_r', 'fair7', 'fair8_r', 'fair9', 'fair10']
 
     def is_displayed(self):
         return self.round_number == Constants.num_rounds  # and self.participant.vars['eligible'] == 1
@@ -485,6 +497,7 @@ class FinalPayment(Page):
     pass
 
 
+# REMOVED PRE-SCREENING SURVEY, SO ALL PARTICIPANTS ARE ELIGIBLE
 # class Ineligible(Page):
 #     def is_displayed(self):
 #         return self.participant.vars['eligible'] == 0
@@ -515,10 +528,11 @@ page_sequence = [
     ResultsBoard,
     AttentionCheck,
     Questionnaire,
+    FairMktIdeology,
     AversionPage,
-    ManipulationChecks,
-    ManipulationChecksBoard,
-    ManipulationChecksReputation,
+    FreeResponse,
+    FreeResponseBoard,
+    FreeResponseReputation,
     OpenComments,
     FinalPayment,
     # Ineligible,

@@ -1,0 +1,31 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Questionnaire
+{% endblock %}
+
+<!-- This measure is meant to capture the participant’s belief that the “free market system is fair, ethical and
+legitimate” (Jost et al., 2003). Hadenbrädl and Waeger (2017) use this as a measure of justification and idealization
+of the free market system. -->
+
+{% block content %}
+<p>
+    Please answer a few questions on your beliefs about business and markets.
+    If you do not feel comfortable answering a question, you may leave it blank.
+    <br><br>Choices range from 5 (Completely Agree) to -5 (Completely Disagree).
+    <br><br>
+    <br><br> {% formfield player.fair1 %}
+    <br><br> {% formfield player.fair2 %}
+    <br><br> {% formfield player.fair3_r %}
+    <br><br> {% formfield player.fair4_r %}
+    <br><br> {% formfield player.fair5 %}
+    <br><br> {% formfield player.fair6_r %}
+    <br><br> {% formfield player.fair7 %}
+    <br><br> {% formfield player.fair8_r %}
+    <br><br> {% formfield player.fair9 %}
+    <br><br> {% formfield player.fair10 %}
+
+</p>
+    {% next_button %}
+{% endblock %}

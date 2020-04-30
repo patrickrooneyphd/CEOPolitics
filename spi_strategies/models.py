@@ -40,9 +40,10 @@ class Subsession(BaseSubsession):
         if self.round_number == 1:
             for p in self.get_players():
                 condition = random.choice(['Board', 'Reputation', 'Control'])
-                # survey_rand = random.randint(1, 3) # Hidden for pilot testing.
-                # p.survey_key = survey_rand # Hidden for pilot testing.
-                # condition = random.choice(['Board', 'Reputation']) # Hidden for pilot testing.
+                # BELOW IS PRE-SCREENING SURVEY FROM PRIOR ITERATION
+                # survey_rand = random.randint(1, 3)
+                # p.survey_key = survey_rand
+                # condition = random.choice(['Board', 'Reputation'])
                 causes = ['the National Rifle Association (NRA)', 'Everytown for Gun Safety', 'The American Red Cross']
                 cause = random.choice(causes)
                 if condition != 'Control':
@@ -55,6 +56,7 @@ class Subsession(BaseSubsession):
                 elif cause == "Everytown for Gun Safety":
                     cause_statement = "which is a prominent organization in the United States dedicated to advocating " \
                                       "for gun control and against gun violence"
+                # BELOW IS ALT CAUSE: ABORTION/WOMEN'S RIGHTS #
                 # if cause == 'Planned Parenthood':
                 #     cause_statement = "which is the largest organization in the United States dedicated to women's \
                 #     reproductive health services. It is also the largest provider of abortions in the country"
@@ -262,23 +264,22 @@ class Player(BasePlayer):
     board_penalty = models.StringField()
     pre_decision_earnings = models.FloatField()
 
-    # == Attention and Manipulation Check Objects == #
+    # == Attention and Free Response Answer Objects == #
 
     attention_check = models.StringField(label='', blank=True)
 
-    manip_1 = models.StringField(label='', widget=widgets.Textarea)
-    manip_2 = models.StringField(label='', widget=widgets.Textarea)
-    manip_3 = models.StringField(label='', widget=widgets.Textarea)
-    manip_4 = models.StringField(label='', widget=widgets.Textarea)
+    free_response_1 = models.StringField(label='', widget=widgets.Textarea)
+    free_response_2 = models.StringField(label='', widget=widgets.Textarea)
+    free_response_3 = models.StringField(label='', widget=widgets.Textarea)
+    free_response_4 = models.StringField(label='', widget=widgets.Textarea)
 
-    manip_b1 = models.StringField(label='', widget=widgets.Textarea)
-    manip_b2 = models.StringField(label='', widget=widgets.Textarea)
+    free_response_b1 = models.StringField(label='', widget=widgets.Textarea)
+    free_response_b2 = models.StringField(label='', widget=widgets.Textarea)
 
-    manip_r1 = models.StringField(label='', widget=widgets.Textarea)
-    manip_r2 = models.StringField(label='', widget=widgets.Textarea)
+    free_response_r1 = models.StringField(label='', widget=widgets.Textarea)
+    free_response_r2 = models.StringField(label='', widget=widgets.Textarea)
 
-
-    # == Questionnaire and Risk/Amb Aversion Objects == #
+    # == Questionnaire and Risk / Ambiguity Aversion Objects == #
     age = models.IntegerField(label='', min=0, max=100, blank=True)
     gender = models.StringField(
         label='',
@@ -319,7 +320,8 @@ class Player(BasePlayer):
     trolley = models.StringField(
         label='',
         widget=widgets.RadioSelect,
-        choices=['Do Nothing; Kill Five People', 'Jerk to the Right; Kill One Person'],
+        choices=['Leave the ventilator in the original patient; the five new patients die',
+                 'Rotate the ventilator among the five new patients; the original patient dies'],
         blank=True
     )
 
@@ -343,15 +345,33 @@ class Player(BasePlayer):
     amb5 = make_risk_amb_fields(['Bag 1 (containing 8 red balls and 12 black balls)', 'Bag 2 (containing 20 balls)'])
     amb6 = make_risk_amb_fields(['Bag 1 (containing 6 red balls and 14 black balls)', 'Bag 2 (containing 20 balls)'])
     amb7 = make_risk_amb_fields(['Bag 1 (containing 4 red balls and 16 black balls)', 'Bag 2 (containing 20 balls)'])
+
+    def make_fair_mkt_fields(label):
+        return models.StringField(
+            label=label,
+            widget=widgets.RadioSelect,
+            choices=["5: Completely Agree", "4", "3", "2", "1", "0: Neither Agree nor Disagree", "-1", "-2", "-3",
+                     "-4", "-5: Completely Disagree"],
+            blank=True
+        )
+
+    fair1 = make_fair_mkt_fields('The free market system is a fair system')
+    fair2 = make_fair_mkt_fields('Common or “normal” business practices must be fair, or they would not survive')
+    fair3_r = make_fair_mkt_fields('In many markets, there is no such thing as a true “fair” market price')
+    fair4_r = make_fair_mkt_fields('Ethical businesses are not as profitable as unethical businesses')
+    fair5 = make_fair_mkt_fields('The most fair economic system is a market system in which everyone is allowed to '
+                                 'independently pursue their own economic interests')
+    fair6_r = make_fair_mkt_fields('Acting in response to market forces is not always a fair way to conduct business')
+    fair7 = make_fair_mkt_fields('The free market system is an efficient system')
+    fair8_r = make_fair_mkt_fields('The free market system has nothing to do with fairness')
+    fair9 = make_fair_mkt_fields('Acting in response to market forces is an ethical way to conduct business')
+    fair10 = make_fair_mkt_fields('In free market systems, people tend to get the outcomes that they deserve')
+
     risk_payoff = models.FloatField()
     risk_payoff_str = models.StringField()
     amb_payoff = models.FloatField()
     amb_payoff_str = models.StringField()
-    open_comments = models.StringField(
-        label='',
-        widget=widgets.Textarea,
-        blank=True
-    )
+    open_comments = models.StringField(label='', widget=widgets.Textarea, blank=True)
 
     # == FUNCTIONS == #
     # == Are participants eligible? == #
