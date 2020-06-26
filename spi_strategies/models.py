@@ -39,12 +39,15 @@ class Subsession(BaseSubsession):
         # == Randomize Conditions == #
         if self.round_number == 1:
             for p in self.get_players():
-                condition = random.choice(['Board', 'Reputation', 'Control'])
+                condition = 'Control'
+                # BELOW IS CONDITION FOR FOLLOW-UP STUDY
+                # condition = 'Board'
                 # BELOW IS PRE-SCREENING SURVEY FROM PRIOR ITERATION
                 # survey_rand = random.randint(1, 3)
                 # p.survey_key = survey_rand
-                # condition = random.choice(['Board', 'Reputation'])
                 causes = ['the National Rifle Association (NRA)', 'Everytown for Gun Safety', 'The American Red Cross']
+                # BELOW ARE CAUSES FOR FOLLOW-UP STUDY
+                # causes = ['the National Rifle Association (NRA)', 'Everytown for Gun Safety']
                 cause = random.choice(causes)
                 if condition != 'Control':
                     cause = causes[0]
@@ -109,7 +112,7 @@ class Player(BasePlayer):
     condition = models.StringField()
     survey_key = models.IntegerField()
 
-    # A few of the questions below are from Burbano (2020, ManSci), Table 1 #
+    # Pre-screening survey (Not used): A few of the questions below are from Burbano (2020, ManSci), Table 1 #
     '''
     def make_survey_fields(label):
         return models.StringField(
