@@ -386,7 +386,7 @@ class FreeResponse(Page):
     form_fields = ['free_response_1', 'free_response_2', 'free_response_3', 'free_response_4']
 
     def is_displayed(self):
-        return self.round_number == Constants.num_rounds and self.participant.vars['condition'] == 'Control' \
+        return self.round_number == Constants.num_rounds and self.participant.vars['condition'] == 'Baseline' \
                # and self.participant.vars['eligible'] == 1
 
     def vars_for_template(self):

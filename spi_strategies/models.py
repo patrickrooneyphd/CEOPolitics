@@ -3,7 +3,7 @@ from otree.api import (
     Currency as c, currency_range
 )
 
-#import itertools
+import itertools
 import random
 import numpy as np
 from django.core.validators import MaxValueValidator, MinValueValidator
@@ -38,19 +38,20 @@ class Subsession(BaseSubsession):
     def creating_session(self):
         # == Randomize Conditions == #
         if self.round_number == 1:
+            causes = itertools.cycle(['the National Rifle Association (NRA)', 'Everytown for Gun Safety',
+                                      'The American Red Cross'])
+            # BELOW IS CONDITION FOR FOLLOW-UP STUDY
+            # condition = 'Board'
+            # BELOW IS PRE-SCREENING SURVEY FROM PRIOR ITERATION
+            # survey_rand = random.randint(1, 3)
+            # p.survey_key = survey_rand
+            # BELOW ARE CAUSES FOR FOLLOW-UP STUDY
+            # causes = ['the National Rifle Association (NRA)', 'Everytown for Gun Safety']
             for p in self.get_players():
-                condition = 'Control'
-                # BELOW IS CONDITION FOR FOLLOW-UP STUDY
-                # condition = 'Board'
-                # BELOW IS PRE-SCREENING SURVEY FROM PRIOR ITERATION
-                # survey_rand = random.randint(1, 3)
-                # p.survey_key = survey_rand
-                causes = ['the National Rifle Association (NRA)', 'Everytown for Gun Safety', 'The American Red Cross']
-                # BELOW ARE CAUSES FOR FOLLOW-UP STUDY
-                # causes = ['the National Rifle Association (NRA)', 'Everytown for Gun Safety']
-                cause = random.choice(causes)
-                if condition != 'Control':
-                    cause = causes[0]
+                condition = 'Baseline'
+                cause = next(causes)
+                if condition != 'Baseline':
+                    cause = "the National Rifle Association (NRA)"
                 else:
                     cause = cause
                 if cause == "the National Rifle Association (NRA)":
