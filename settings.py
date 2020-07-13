@@ -36,8 +36,8 @@ REAL_WORLD_CURRENCY_DECIMAL_PLACES = 2
 
 ROOMS = [
     dict(
-        name='MTurk_Strategy_Game',
-        display_name='MTurk_Strategy_Game',
+        name='ProlificStrategyGame',
+        display_name='ProlificStrategyGame',
     ),
     dict(
         name='Prolific_Strategy_Game',

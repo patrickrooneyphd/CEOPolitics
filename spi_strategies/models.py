@@ -27,7 +27,7 @@ class Constants(BaseConstants):
                         [0.10, 1.00, 1.50]])
     donation_pct = 0.10
     orig_value = 3.00
-    reputation_penalty = 0.25
+    reputation_penalty = 0.50
     min_value = 0.50
     board_deny_threshold = 50
     likert = ['Strongly Disagree', 'Disagree', 'Slightly Disagree', 'Slightly Agree', 'Agree', 'Strongly Agree']
@@ -38,19 +38,17 @@ class Subsession(BaseSubsession):
     def creating_session(self):
         # == Randomize Conditions == #
         if self.round_number == 1:
-            causes = itertools.cycle(['the National Rifle Association (NRA)', 'Everytown for Gun Safety',
-                                      'The American Red Cross'])
+            causes = itertools.cycle(['the National Rifle Association (NRA)', 'Everytown for Gun Safety'])
             # BELOW IS CONDITION FOR FOLLOW-UP STUDY
-            # condition = 'Board'
             # BELOW IS PRE-SCREENING SURVEY FROM PRIOR ITERATION
             # survey_rand = random.randint(1, 3)
             # p.survey_key = survey_rand
             # BELOW ARE CAUSES FOR FOLLOW-UP STUDY
             # causes = ['the National Rifle Association (NRA)', 'Everytown for Gun Safety']
             for p in self.get_players():
-                condition = 'Baseline'
+                condition = 'Reputation'
                 cause = next(causes)
-                if condition != 'Baseline':
+                if condition != 'Reputation':
                     cause = "the National Rifle Association (NRA)"
                 else:
                     cause = cause
