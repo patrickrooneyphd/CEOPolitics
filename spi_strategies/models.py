@@ -1,3 +1,17 @@
+author = 'Patrick Rooney'
+
+doc = """
+Antecedents to CEOs' Strategic Political Stances
+"""
+
+desc = """
+Version: 05-27-2021
+oTree-based simulation game to causally determine the factors that lead executives to take a 
+political stance as part of their business strategy. This file contains objects and functions needed 
+for the Subsession (i.e., Round) and Player classes for the baseline study, the activist pushback 
+(reputation) condition, and the (unused) board block condition. Set condition for study on line 54.
+"""
+
 from otree.api import (
     models, widgets, BaseConstants, BaseSubsession, BaseGroup, BasePlayer,
     Currency as c, currency_range
@@ -8,28 +22,22 @@ import random
 import numpy as np
 from django.core.validators import MaxValueValidator, MinValueValidator
 
-author = 'Patrick Rooney'
-
-doc = """
-Antecedents to CEOs' Strategic Political Stances
-"""
-
 
 class Constants(BaseConstants):
     name_in_url = 'spi_strategies'
-    players_per_group = None
-    num_rounds = 10
-    max_pi = np.array([3.5, 5.0, 9.0])
-    opt_values = np.array([[90, 60, 10],
+    players_per_group = None    # This is an individual-level experiment
+    num_rounds = 10     # Number of rounds in the experiment
+    max_pi = np.array([3.5, 5.0, 9.0])  # Local maxima for profit in 3 market niches
+    opt_values = np.array([[90, 60, 10],    # Optimal input values corresponding to local maxima
                            [9, 49, 99]])
-    penalty = np.array([[0.10, 2.50, 3.00],
+    penalty = np.array([[0.10, 2.50, 3.00],     # Linear profit penalty for each input
                         [0.10, 1.00, 1.50],
                         [0.10, 1.00, 1.50]])
-    donation_pct = 0.10
-    orig_value = 3.00
-    reputation_penalty = 0.50
-    min_value = 0.50
-    board_deny_threshold = 50
+    donation_pct = 0.10     # % of round earnings that participants will donate in game
+    orig_value = 3.00       # First reference point profit
+    reputation_penalty = 0.50   # Absolute profit penalty per stance "flip flop"
+    min_value = 0.50        # Minimum profit (excluding penalty assessed by board, which is $0.50)
+    board_deny_threshold = 50   # % of time board blocks the stance strategy
     likert = ['Strongly Disagree', 'Disagree', 'Slightly Disagree', 'Slightly Agree', 'Agree', 'Strongly Agree']
 
 
@@ -38,38 +46,23 @@ class Subsession(BaseSubsession):
     def creating_session(self):
         # == Randomize Conditions == #
         if self.round_number == 1:
-            causes = itertools.cycle(['the National Rifle Association (NRA)', 'Everytown for Gun Safety'])
-            # BELOW IS CONDITION FOR FOLLOW-UP STUDY
-            # BELOW IS PRE-SCREENING SURVEY FROM PRIOR ITERATION
-            # survey_rand = random.randint(1, 3)
-            # p.survey_key = survey_rand
-            # BELOW ARE CAUSES FOR FOLLOW-UP STUDY
-            # causes = ['the National Rifle Association (NRA)', 'Everytown for Gun Safety']
+            causes = itertools.cycle(['the National Rifle Association (NRA)', 'Everytown for Gun Safety',
+                                      'The American Red Cross'])
+            conditions = ["Baseline", "Reputation", "Board"]
             for p in self.get_players():
-                condition = 'Reputation'
-                cause = next(causes)
-                if condition != 'Reputation':
-                    cause = "the National Rifle Association (NRA)"
-                else:
-                    cause = cause
+                condition = conditions[0]   # Set condition for study  (currently "Baseline")
+                cause = next(causes)       # Assign causes to participants
                 if cause == "the National Rifle Association (NRA)":
                     cause_statement = "which is a prominent organization in the United States dedicated to protecting " \
                                       "gun rights and providing gun education services"
                 elif cause == "Everytown for Gun Safety":
                     cause_statement = "which is a prominent organization in the United States dedicated to advocating " \
                                       "for gun control and against gun violence"
-                # BELOW IS ALT CAUSE: ABORTION/WOMEN'S RIGHTS #
-                # if cause == 'Planned Parenthood':
-                #     cause_statement = "which is the largest organization in the United States dedicated to women's \
-                #     reproductive health services. It is also the largest provider of abortions in the country"
-                # elif cause == 'The National Right to Life Committee':
-                #     cause_statement = "which is the largest organization in the United States dedicated to lobbying
-                #     for pro-life causes. It principally advocates against abortion, as well as euthanasia and
-                #     assisted suicide"
                 else:
                     cause_statement = "which is an American humanitarian organization that provides emergency \
                                       assistance, disaster relief and preparedness programs, among other services"
 
+                # Assign player objects (constant within round) and participant objects (constant across rounds)
                 p.condition = condition
                 p.cause = cause
                 p.participant.vars['condition'] = condition
@@ -78,9 +71,9 @@ class Subsession(BaseSubsession):
                 p.participant.vars['donation_num'] = 0
                 p.participant.vars['social_action_count'] = 0
             else:
-                self.group_like_round(1)
+                self.group_like_round(1)    # Use oTree's "group_like_round" method-- maintains conditions across rounds
 
-        # == Choose Paid Rounds == #
+        # == Randomly Choose Paid Rounds, one from first half, one from second half == #
         if self.round_number == 1:
             paying_round_a = random.randint(1, Constants.num_rounds/2)
             paying_round_b = random.randint(Constants.num_rounds/2 + 1,  Constants.num_rounds)
@@ -107,32 +100,11 @@ class Player(BasePlayer):
     end_time = models.FloatField()
     round_earnings = models.FloatField()
     round_earnings_str = models.StringField()
-    # round_earnings_init = models.FloatField()
+    # round_earnings_init = models.FloatField() <- DO I NEED THIS???
     condition = models.StringField()
-    survey_key = models.IntegerField()
-
-    # Pre-screening survey (Not used): A few of the questions below are from Burbano (2020, ManSci), Table 1 #
-    '''
-    def make_survey_fields(label):
-        return models.StringField(
-            label=label,
-            choices=Constants.likert,
-            widget=widgets.RadioSelect
-        )
-
-    eligible_survey_1 = make_survey_fields('Family planning organizations should not provide abortion services.')
-    eligible_survey_2 = make_survey_fields("I generally consider myself Pro-Life on abortion issues.")
-    eligible_survey_3 = make_survey_fields('The media is a trustworthy source of news and current events.')
-    eligible_survey_4 = make_survey_fields('I think police officers should be required to wear body cameras.')
-    eligible_survey_5 = make_survey_fields('The United States should use drone strikes overseas to diminish terrorism.')
-    eligible_survey_6 = make_survey_fields('Transgender individuals should be allowed to serve in the U.S. military.')
-    eligible_survey_7 = make_survey_fields('I believe the ability to own a gun is a basic aspect of American freedom.')
-    eligible_survey_8 = make_survey_fields('I think the U.S. government should institute stricter gun control rules.')
-    eligible_survey_9 = make_survey_fields("The mainstream media can't be counted on to report the truth.")
-    eligible_survey_10 = make_survey_fields('The U.S. should withdraw from all military activity in the Middle East.')
-    eligible = models.IntegerField()
-    '''
     cause = models.StringField()
+
+    # Allow for small mistakes in inputting consent/confirmation
     consent = models.StringField(label='', choices=['I consent', 'I consent '], widget=widgets.TextInput)
     confirm_cause_nra = models.StringField(label='',
                                           choices=['Any donations I make in this experiment will '
@@ -177,7 +149,7 @@ class Player(BasePlayer):
     rand_num = models.IntegerField()
     social_action_count = models.IntegerField()
 
-    # == Create Production Objects == #
+    # == Create Strategy Bundle Input Objects == #
     type = models.StringField(
         label='',
         widget=widgets.RadioSelect,
@@ -196,6 +168,7 @@ class Player(BasePlayer):
         choices=['No Action', 'Donate 10% of Period Earnings'],
         blank=False
     )
+    # Default strategy bundle choices for first round (first reference strategy from previous CEO letter)
     type1 = models.StringField(
         label='',
         widget=widgets.RadioSelect,
@@ -214,6 +187,7 @@ class Player(BasePlayer):
         blank=False,
         initial='No Action'
     )
+    # Boolean match objects for assigning relevant market niche from strategy
     t_match1 = models.BooleanField()
     t_match2 = models.BooleanField()
     t_match3 = models.BooleanField()
@@ -224,7 +198,7 @@ class Player(BasePlayer):
     match2 = models.BooleanField()
     match3 = models.BooleanField()
 
-    # == Notes Variables on Results Page == #
+    # == Objects to Store Notes Taken on Results Page == #
     round_earnings_n = models.DecimalField(label='', decimal_places=2, max_digits=4, blank=True)
     type_n = models.StringField(
         label='',
@@ -267,7 +241,6 @@ class Player(BasePlayer):
     pre_decision_earnings = models.FloatField()
 
     # == Attention and Free Response Answer Objects == #
-
     attention_check = models.StringField(label='', blank=True)
 
     free_response_1 = models.StringField(label='', widget=widgets.Textarea)
@@ -376,20 +349,7 @@ class Player(BasePlayer):
     open_comments = models.StringField(label='', widget=widgets.Textarea, blank=True)
 
     # == FUNCTIONS == #
-    # == Are participants eligible? == #
-
-    def set_eligibility(self):
-        agree_list = ['Strongly Agree', 'Agree', 'Slightly Agree']
-        agree_one = (self.eligible_survey_1 in agree_list)
-        agree_two = (self.eligible_survey_2 in agree_list)
-        if agree_one or agree_two is True:
-            self.eligible = 1
-        else:
-            self.eligible = 0
-        self.participant.vars['eligible'] = self.eligible
-
-    # == Assign first period choices to choice variables == #
-
+    # == Assign first period default choices from CEO letter to production input variables == #
     def first_period_to_vars(self):
         self.type = self.type1
         self.cotton = self.cotton1
@@ -423,7 +383,7 @@ class Player(BasePlayer):
             self.price = 49
             self.social_action = 'No Action'
 
-    # == Determine if participant chose optimal type given spi action == #
+    # == Determine if participant chose optimal input given donation action == #
     def determine_type_match(self):
         self.t_match1 = (self.type == "Sweater Vest")
         self.t_match2 = (self.type == "Turtleneck")
@@ -434,7 +394,7 @@ class Player(BasePlayer):
         self.match2 = (self.t_match2 == self.d_match2)
         self.match3 = (self.t_match3 == self.d_match3)
 
-    # == Determine payoffs by category == #
+    # == Determine payoffs by input bundle (Creates profit landscape) == #
     def determine_round_earnings(self):
         if self.social_action == 'No Action' and self.type == 'Sweater Vest':
             self.round_earnings = round(max(Constants.max_pi[0] - \
@@ -466,13 +426,13 @@ class Player(BasePlayer):
                           abs(Constants.opt_values[1, 2] - self.price) / 10.0 * Constants.penalty[2, 2],
                                             Constants.min_value), 2)
 
-        # self.round_earnings_init = round(self.round_earnings, 2)
+        # self.round_earnings_init = round(self.round_earnings, 2) <-- DO I NEED THIS??
 
-    # == Set pre-decision earnings == #
+    # == Set pre-board decision earnings == #
     def set_pre_decision_earnings(self):
         self.pre_decision_earnings = self.round_earnings - (self.round_earnings * Constants.donation_pct)
 
-    # == Adjust payoff for board decision and reputation == #
+    # == Adjust payoff for board decision or reputation, depending on condition == #
     def board_adjust(self):
         if self.board_block == 'Blocked':
             self.round_earnings = Constants.orig_value - Constants.min_value
@@ -494,7 +454,7 @@ class Player(BasePlayer):
         else:
             self.round_earnings = self.round_earnings
 
-    # == Calculate donation == #
+    # == Calculate donation if stance taken == #
     def donation_calculate(self):
         if self.social_action == 'Donate 10% of Period Earnings':
             self.donation = round((self.round_earnings * Constants.donation_pct), 2)
@@ -502,12 +462,12 @@ class Player(BasePlayer):
         else:
             self.donation = 0.00
 
-    # == Create String Variables for Currencies on Results Pages == #
+    # == Create string variables so currencies will display on results pages == #
     def string_convert(self):
         self.round_earnings_str = '{:,.2f}'.format(self.round_earnings)
         self.round_donation_str = '{:,.2f}'.format(self.donation)
 
-    # == Calculate payoffs and create strings for final display== #
+    # == Calculate payoffs and create strings for final display == #
     def set_payoffs(self):
         if self.subsession.round_number == self.participant.vars['paying_round_a']:
             self.payoff_a = round(self.round_earnings / 2, 2)
@@ -542,7 +502,7 @@ class Player(BasePlayer):
         rand1 = random.randint(0, 100)
         rand2 = random.randint(0, 100)
 
-        #== Risk Aversion Payoffs ==#
+        # == Risk Aversion Payoffs == #
         if risk == '$10 with probability 50%, $2 with probability 50%':
             if rand1 > 50:
                 self.payoff = self.payoff + 0.50
@@ -554,7 +514,7 @@ class Player(BasePlayer):
             self.risk_payoff = risk_dict[risk]
             self.payoff = self.payoff + self.risk_payoff
 
-        # == Ambiguity Aversion Payoffs ==#
+        # == Ambiguity Aversion Payoffs == #
         if amb == 'Bag 2 (containing 20 balls)':
             if rand1 > rand2:
                 self.payoff = self.payoff + 0.50

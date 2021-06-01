@@ -1,3 +1,15 @@
+author = 'Patrick Rooney'
+
+doc = """
+Antecedents to CEOs' Strategic Political Stances
+"""
+
+desc = """
+Version: 05-27-2021
+This file contains Page classes, relevant models and fields from models.py, and the page sequence 
+(experimental flow). Individual HTML templates for each of these pages can be found in templates folder
+"""
+
 from otree.api import Currency as c, currency_range
 from ._builtin import Page, WaitPage
 from .models import Constants
@@ -11,7 +23,6 @@ class ProlificID(Page):
 
     def is_displayed(self):
         return self.round_number == 1
-    pass
 
 
 class Consent(Page):
@@ -22,52 +33,10 @@ class Consent(Page):
         return self.round_number == 1
 
 
-# REMOVED PRE-SCREENING SURVEY
-'''
-class OpeningSurvey1(Page):
-    form_model = 'player'
-    form_fields = ['eligible_survey_1', 'eligible_survey_2', 'eligible_survey_3', 'eligible_survey_4',
-                   'eligible_survey_5', 'eligible_survey_6', 'eligible_survey_7', 'eligible_survey_8',
-                   'eligible_survey_9', 'eligible_survey_10']
-
-    def is_displayed(self):
-        return self.round_number == 1 and self.player.survey_key == 1
-
-    def before_next_page(self):
-        self.player.set_eligibility()
-
-
-class OpeningSurvey2(Page):
-    form_model = 'player'
-    form_fields = ['eligible_survey_1', 'eligible_survey_2', 'eligible_survey_3', 'eligible_survey_4',
-                   'eligible_survey_5', 'eligible_survey_6', 'eligible_survey_7', 'eligible_survey_8',
-                   'eligible_survey_9', 'eligible_survey_10']
-
-    def is_displayed(self):
-        return self.round_number == 1 and self.player.survey_key == 2
-
-    def before_next_page(self):
-        self.player.set_eligibility()
-
-
-class OpeningSurvey3(Page):
-    form_model = 'player'
-    form_fields = ['eligible_survey_1', 'eligible_survey_2', 'eligible_survey_3', 'eligible_survey_4',
-                   'eligible_survey_5', 'eligible_survey_6', 'eligible_survey_7', 'eligible_survey_8',
-                   'eligible_survey_9', 'eligible_survey_10']
-
-    def is_displayed(self):
-        return self.round_number == 1 and self.player.survey_key == 3
-
-    def before_next_page(self):
-        self.player.set_eligibility()
-'''
-
-
 class Introduction(Page):
 
     def is_displayed(self):
-        return self.round_number == 1  # and self.participant.vars['eligible'] == 1
+        return self.round_number == 1
 
     def before_next_page(self):
         self.player.start_time = time.time()
@@ -78,24 +47,21 @@ class Introduction(Page):
             'cause_statement': self.participant.vars['cause_statement'],
             'orig_value_s': Constants.orig_value,
         }
-    pass
 
 
 class ManagerAdvice(Page):
     def is_displayed(self):
-        return self.round_number == 1   # and self.participant.vars['eligible'] == 1
+        return self.round_number == 1
 
     def vars_for_template(self):
         return {
             'orig_value_s': Constants.orig_value,
         }
-    pass
 
 
 class IntroductionBoard(Page):
     def is_displayed(self):
-        return self.round_number == 1 and self.participant.vars['condition'] == 'Board' \
-               # and self.participant.vars['eligible'] == 1
+        return self.round_number == 1 and self.participant.vars['condition'] == 'Board'
 
     def vars_for_template(self):
         return {
@@ -103,19 +69,16 @@ class IntroductionBoard(Page):
             'orig_value_s': Constants.orig_value,
             'min_value_s': Constants.min_value,
         }
-    pass
 
 
 class IntroductionReputation(Page):
     def is_displayed(self):
-        return self.round_number == 1 and self.participant.vars['condition'] == 'Reputation' \
-               # and self.participant.vars['eligible'] == 1
+        return self.round_number == 1 and self.participant.vars['condition'] == 'Reputation'
 
     def vars_for_template(self):
         return {
             'cause': self.participant.vars['cause'],
         }
-    pass
 
 
 class ConfirmNRA(Page):
@@ -123,15 +86,13 @@ class ConfirmNRA(Page):
     form_fields = ['confirm_cause_nra', 'confirm_money']
 
     def is_displayed(self):
-        return self.round_number == 1 and self.participant.vars['cause'] == 'the National Rifle Association (NRA)' \
-               # and self.participant.vars['eligible'] == 1
+        return self.round_number == 1 and self.participant.vars['cause'] == 'the National Rifle Association (NRA)'
 
     def vars_for_template(self):
         return {
             'cause': self.participant.vars['cause'],
             'cause_statement': self.participant.vars['cause_statement']
         }
-    pass
 
 
 class ConfirmETFGS(Page):
@@ -139,15 +100,13 @@ class ConfirmETFGS(Page):
     form_fields = ['confirm_cause_etfgs', 'confirm_money']
 
     def is_displayed(self):
-        return self.round_number == 1 and self.participant.vars['cause'] == 'Everytown for Gun Safety' \
-               # and self.participant.vars['eligible'] == 1
+        return self.round_number == 1 and self.participant.vars['cause'] == 'Everytown for Gun Safety'
     
     def vars_for_template(self):
         return {
             'cause': self.participant.vars['cause'],
             'cause_statement': self.participant.vars['cause_statement'],
         }
-    pass
 
 
 class ConfirmRC(Page):
@@ -155,33 +114,29 @@ class ConfirmRC(Page):
     form_fields = ['confirm_cause_rc', 'confirm_money']
 
     def is_displayed(self):
-        return self.round_number == 1 and self.participant.vars['cause'] == 'The American Red Cross' \
-               # and self.participant.vars['eligible'] == 1
+        return self.round_number == 1 and self.participant.vars['cause'] == 'The American Red Cross'
 
     def vars_for_template(self):
         return {
             'cause': self.participant.vars['cause'],
             'cause_statement': self.participant.vars['cause_statement']
         }
-    pass
 
 
 class MktResearchInstructions(Page):
     def is_displayed(self):
-        return self.round_number == Constants.num_rounds / 2 + 1  # and self.participant.vars['eligible'] == 1
-    pass
+        return self.round_number == Constants.num_rounds / 2 + 1
 
 
 class MktResearchPage(Page):
 
     def is_displayed(self):
-        return self.round_number == Constants.num_rounds / 2 + 1  # and self.participant.vars['eligible'] == 1
+        return self.round_number == Constants.num_rounds / 2 + 1
 
     def vars_for_template(self):
         return {
             'cause': self.participant.vars['cause'],
         }
-    pass
 
 
 class FirstPeriod(Page):
@@ -189,8 +144,7 @@ class FirstPeriod(Page):
     form_fields = ['type1', 'cotton1', 'price1', 'social_action1']
 
     def is_displayed(self):
-        return self.round_number == 1 and self.participant.vars['condition'] != 'Board' \
-               # and self.participant.vars['eligible'] == 1
+        return self.round_number == 1 and self.participant.vars['condition'] != 'Board'
 
     def vars_for_template(self):
         return {
@@ -205,7 +159,6 @@ class FirstPeriod(Page):
         self.player.donation_calculate()
         self.player.string_convert()
         self.player.set_payoffs()
-    pass
 
 
 class FirstPeriodBoard(Page):
@@ -213,8 +166,7 @@ class FirstPeriodBoard(Page):
     form_fields = ['type1', 'cotton1', 'price1', 'social_action1']
 
     def is_displayed(self):
-        return self.round_number == 1 and self.participant.vars['condition'] == 'Board' \
-               # and self.participant.vars['eligible'] == 1
+        return self.round_number == 1 and self.participant.vars['condition'] == 'Board'
 
     def vars_for_template(self):
         return {
@@ -234,7 +186,6 @@ class FirstPeriodBoard(Page):
         self.player.donation_calculate()
         self.player.string_convert()
         self.player.set_payoffs()
-    pass
 
 
 class PeriodFirstHalf(Page):
@@ -242,8 +193,7 @@ class PeriodFirstHalf(Page):
     form_fields = ['type', 'cotton', 'price', 'social_action']
 
     def is_displayed(self):
-        return self.round_number < 6 and self.participant.vars['condition'] != 'Board' and self.round_number != 1 \
-               # and self.participant.vars['eligible'] == 1
+        return self.round_number < 6 and self.participant.vars['condition'] != 'Board' and self.round_number != 1
 
     def before_next_page(self):
         self.player.determine_type_match()
@@ -258,7 +208,6 @@ class PeriodFirstHalf(Page):
             'player_in_previous_rounds': self.player.in_previous_rounds(),
             'cause': self.participant.vars['cause']
         }
-    pass
 
 
 class PeriodBoardFirstHalf(Page):
@@ -266,8 +215,7 @@ class PeriodBoardFirstHalf(Page):
     form_fields = ['type_b', 'cotton_b', 'price_b', 'social_action_b']
 
     def is_displayed(self):
-        return self.round_number < 6 and self.participant.vars['condition'] == 'Board' and self.round_number != 1 \
-               # and self.participant.vars['eligible'] == 1
+        return self.round_number < 6 and self.participant.vars['condition'] == 'Board' and self.round_number != 1
 
     def vars_for_template(self):
         return {
@@ -288,16 +236,13 @@ class PeriodBoardFirstHalf(Page):
         self.player.string_convert()
         self.player.set_payoffs()
 
-    pass
-
 
 class PeriodSecondHalf(Page):
     form_model = 'player'
     form_fields = ['type', 'cotton', 'price', 'social_action']
 
     def is_displayed(self):
-        return self.round_number > 5 and self.participant.vars['condition'] != 'Board' \
-               # and self.participant.vars['eligible'] == 1
+        return self.round_number > 5 and self.participant.vars['condition'] != 'Board'
 
     def before_next_page(self):
         self.player.determine_type_match()
@@ -312,7 +257,6 @@ class PeriodSecondHalf(Page):
             'player_in_previous_rounds': self.player.in_previous_rounds(),
             'cause': self.participant.vars['cause']
         }
-    pass
 
 
 class PeriodBoardSecondHalf(Page):
@@ -320,8 +264,7 @@ class PeriodBoardSecondHalf(Page):
     form_fields = ['type_b', 'cotton_b', 'price_b', 'social_action_b']
 
     def is_displayed(self):
-        return self.round_number > 5 and self.participant.vars['condition'] == 'Board' \
-             # and self.participant.vars['eligible'] == 1
+        return self.round_number > 5 and self.participant.vars['condition'] == 'Board'
 
     def vars_for_template(self):
         return {
@@ -341,7 +284,6 @@ class PeriodBoardSecondHalf(Page):
         self.player.donation_calculate()
         self.player.string_convert()
         self.player.set_payoffs()
-    pass
 
 
 class Results(Page):
@@ -349,13 +291,12 @@ class Results(Page):
     form_fields = ['round_earnings_n', 'type_n', 'cotton_n', 'price_n', 'social_action_n']
 
     def is_displayed(self):
-        return self.participant.vars['condition'] != 'Board'  # and self.participant.vars['eligible'] == 1
+        return self.participant.vars['condition'] != 'Board'
 
     def vars_for_template(self):
         return {
             'cause': self.participant.vars['cause'],
         }
-    pass
 
 
 class ResultsBoard(Page):
@@ -363,13 +304,12 @@ class ResultsBoard(Page):
     form_fields = ['round_earnings_n', 'type_n', 'cotton_n', 'price_n', 'social_action_n', 'board_block_n']
 
     def is_displayed(self):
-        return self.participant.vars['condition'] == 'Board'  # and self.participant.vars['eligible'] == 1
+        return self.participant.vars['condition'] == 'Board'
 
     def vars_for_template(self):
         return {
             'cause': self.participant.vars['cause'],
         }
-    pass
 
 
 class AttentionCheck(Page):
@@ -377,8 +317,7 @@ class AttentionCheck(Page):
     form_fields = ['attention_check']
 
     def is_displayed(self):
-        return self.round_number == Constants.num_rounds  # and self.participant.vars['eligible'] == 1
-    pass
+        return self.round_number == Constants.num_rounds
 
 
 class FreeResponse(Page):
@@ -386,14 +325,12 @@ class FreeResponse(Page):
     form_fields = ['free_response_1', 'free_response_2', 'free_response_3', 'free_response_4']
 
     def is_displayed(self):
-        return self.round_number == Constants.num_rounds and self.participant.vars['condition'] == 'Baseline' \
-               # and self.participant.vars['eligible'] == 1
+        return self.round_number == Constants.num_rounds and self.participant.vars['condition'] == 'Baseline'
 
     def vars_for_template(self):
         return {
             'cause': self.participant.vars['cause'],
         }
-    pass
 
 
 class FreeResponseBoard(Page):
@@ -402,14 +339,12 @@ class FreeResponseBoard(Page):
                    'free_response_b1', 'free_response_b2']
 
     def is_displayed(self):
-        return self.round_number == Constants.num_rounds and self.participant.vars['condition'] == 'Board' \
-               # and self.participant.vars['eligible'] == 1
+        return self.round_number == Constants.num_rounds and self.participant.vars['condition'] == 'Board'
 
     def vars_for_template(self):
         return {
             'cause': self.participant.vars['cause'],
         }
-    pass
 
 
 class FreeResponseReputation(Page):
@@ -418,14 +353,12 @@ class FreeResponseReputation(Page):
                    'free_response_r1', 'free_response_r2']
 
     def is_displayed(self):
-        return self.round_number == Constants.num_rounds and self.participant.vars['condition'] == 'Reputation' \
-               # and self.participant.vars['eligible'] == 1
+        return self.round_number == Constants.num_rounds and self.participant.vars['condition'] == 'Reputation'
 
     def vars_for_template(self):
         return {
             'cause': self.participant.vars['cause'],
         }
-    pass
 
 
 class Questionnaire(Page):
@@ -434,8 +367,7 @@ class Questionnaire(Page):
                    'trolley']
 
     def is_displayed(self):
-        return self.round_number == Constants.num_rounds  # and self.participant.vars['eligible'] == 1
-    pass
+        return self.round_number == Constants.num_rounds
 
 
 class FairMktIdeology(Page):
@@ -443,8 +375,7 @@ class FairMktIdeology(Page):
     form_fields = ['fair1', 'fair2', 'fair3_r', 'fair4_r', 'fair5', 'fair6_r', 'fair7', 'fair8_r', 'fair9', 'fair10']
 
     def is_displayed(self):
-        return self.round_number == Constants.num_rounds  # and self.participant.vars['eligible'] == 1
-    pass
+        return self.round_number == Constants.num_rounds
 
 
 class AversionPage(Page):
@@ -452,11 +383,10 @@ class AversionPage(Page):
     form_fields = ['risk1', 'risk2', 'risk3', 'risk4', 'risk5', 'amb1', 'amb2', 'amb3', 'amb4', 'amb5', 'amb6', 'amb7']
 
     def is_displayed(self):
-        return self.round_number == Constants.num_rounds  # and self.participant.vars['eligible'] == 1
+        return self.round_number == Constants.num_rounds
 
     def before_next_page(self):
         self.player.extra_payments()
-    pass
 
 
 class OpenComments(Page):
@@ -464,16 +394,15 @@ class OpenComments(Page):
     form_fields = ['open_comments']
 
     def is_displayed(self):
-        return self.round_number == Constants.num_rounds  # and self.participant.vars['eligible'] == 1
+        return self.round_number == Constants.num_rounds
 
     def before_next_page(self):
         self.player.end_time = time.time()
-    pass
 
 
 class FinalPayment(Page):
     def is_displayed(self):
-        return self.round_number == Constants.num_rounds  # and self.participant.vars['eligible'] == 1
+        return self.round_number == Constants.num_rounds
 
     def vars_for_template(self):
         player_in_all_rounds = self.player.in_all_rounds()
@@ -494,21 +423,11 @@ class FinalPayment(Page):
             'cause': self.participant.vars['cause'],
             'donation': self.participant.vars['donation']
         }
-    pass
-
-
-# REMOVED PRE-SCREENING SURVEY, SO ALL PARTICIPANTS ARE ELIGIBLE
-# class Ineligible(Page):
-#     def is_displayed(self):
-#         return self.participant.vars['eligible'] == 0
 
 
 page_sequence = [
     ProlificID,
     Consent,
-    # OpeningSurvey1,
-    # OpeningSurvey2,
-    # OpeningSurvey3,
     Introduction,
     ManagerAdvice,
     IntroductionBoard,
@@ -535,5 +454,4 @@ page_sequence = [
     FreeResponseReputation,
     OpenComments,
     FinalPayment,
-    # Ineligible,
 ]
