@@ -32,8 +32,8 @@ There are two ways to access this experiment:
     4. Install requirements: ```$ pip install requirements.txt```  
     5. Open devserver:```$ otree devserver```  
 
-**To distribute this experiment on Heroku:**
-    1. Follow steps in 1. to ensure the demo works  
+**To distribute this experiment on Heroku:**  
+    1. Follow steps to demo the experiment to ensure the demo works  
     2. Create user profile on [heroku.com](heroku.com)  
     3. In the project's "Resources" tab, enable web and worker dynos  
     4. For < ~10,000 users, provision Heroku Redis Premium-0, Heroku Postgres Hobby Basic  
