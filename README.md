@@ -17,7 +17,7 @@
 
 ### Replication
 
-Anyone can replicate this project using a new participant sample by cloning the repository, installing the requirements in requirements, and deploying the project to Heroku.
+Anyone can replicate this project using a new participant sample by cloning the repository, installing the requirements.txt, and deploying the project to Heroku.
 
 [(back to top)](#political-stance-tweets-project)
 
