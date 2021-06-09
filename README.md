@@ -25,19 +25,19 @@ Anyone can replicate this project using a new participant sample by cloning the 
 
 There are two ways to access this experiment:
 
-*To demo the experiment:*  
+**To demo the experiment:**  
     1. Create and activate a new virtual environment  
     2. Clone this directory  
     3. Change directory to path on your machine: e.g., ```$ cd CEOPolitics```  
     4. Install requirements: ```$ pip install requirements.txt```  
     5. Open devserver:```$ otree devserver```  
 
-*To distribute this experiment on Heroku:*  
+**To distribute this experiment on Heroku:**
     1. Follow steps in 1. to ensure the demo works  
-    2. Create user profile on (heroku.com)[heroku.com]  
+    2. Create user profile on [heroku.com](heroku.com)  
     3. In the project's "Resources" tab, enable web and worker dynos  
     4. For < ~10,000 users, provision Heroku Redis Premium-0, Heroku Postgres Hobby Basic  
-    5. Create a profile on (oTreehub)[https://www.otreehub.com/]  
+    5. Create a profile on [oTreehub](https://www.otreehub.com/)  
     6. Deploy .otreezip file to Heroku and reset database  
   
 
